@@ -1,0 +1,21 @@
+\documentclass[letter, 12pt]{article}
+
+\usepackage{fullpage} % Package to use full page
+\usepackage{parskip} % Package to tweak paragraph skipping
+\usepackage{tikz} % Package for drawing
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{subfigure}
+\usepackage[margin=0.5in]{geometry}
+
+\title{16-811: Math Fundamentals for Robotics (Fall 2018)\\ Project Proposal \\ \textbf{Constrained Bundle Adjustment for 3D Reconstruction}}
+\author{\textbf{Group}: Poincare Taylor Euler Pi \\ \textbf{Members}: Anuj Pahuja (apahuja), Abhay Gupta (abhayg)}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+Given a set of images depicting a number of 3D points from different viewpoints, bundle adjustment can be defined as the problem of simultaneously refining the 3D coordinates describing the scene geometry, the parameters of the relative motion, and the optical characteristics of the camera(s) employed to acquire the images, according to an optimality criterion involving the corresponding image projections of all points\footnote{Source: Wikipedia - Article: \href{https://en.wikipedia.org/wiki/Bundle\_adjustment}{Bundle Adjustment}}. The conventional bundle adjustment algorithm takes the parameters either as a fixed value or an unconstrained variable to optimize based on whether the parameter is known or not. An inaccuracy in a fixed value can lead to convergence at an undesirable local minimum and inaccurate reconstruction. However, if there are known bounds for some parameters, we can add those constraints to the bundle adjustment pipeline to account for the limited variability observed for those parameters. Although these bounded parameters can be optimized as free variables, the optimizer would not exploit their constraints and could assign them arbitrary values in order to reach a good extremum, often resulting in an erroneous reconstruction. A constrained bundle adjustment algorithm would overcome these shortcomings by allowing freedom to the fixed and inaccurate values for optimization while utilizing their known bounds as additional constraints. This extension would add robustness to the system and would converge at solutions that are consistent with the known bounds. This addition is interesting because it allows a lot of flexibility for the user while modeling the bundle adjustment problem. Since bundle adjustment is very sensitive to the initialization, incorporating any pre-known knowledge about the system would make it much more stable and accurate.
+
+\end{document}
