@@ -16,9 +16,10 @@ def readParams(filename):
 
     for i in range(1, num_observations+1):
         a = lines[i].split(' ')
+        a = [x for x in a if x]
         camera_indices[i-1] = int(a[0])
         point_indices[i-1] = int(a[1])
-        x,y = float(a[6]), float(a[7])
+        x,y = float(a[2]), float(a[3])
         points_2d[i-1] = np.array([x,y])
 
     camera_k = num_cameras*9+1
