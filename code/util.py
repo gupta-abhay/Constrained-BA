@@ -11,8 +11,8 @@ def readParams(filename):
     num_cameras, num_points, num_observations = int(params[0]), int(params[1]), int(params[2])
 
     points_2d = np.zeros((num_observations,2))
-    camera_indices = np.zeros(num_observations)
-    point_indices = np.zeros(num_observations)
+    camera_indices = np.zeros(num_observations, dtype=np.int32)
+    point_indices = np.zeros(num_observations, dtype=np.int32)
 
     for i in range(1, num_observations+1):
         a = lines[i].split(' ')
