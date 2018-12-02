@@ -30,22 +30,42 @@ def reprojection_err(camera, point_2d, point_3d):
     predicted_y = focal * distortion * yp
 
     # The error is the difference between the predicted and observed position.
+    residual = [predicted_x - point_2d[0], predicted_y - point_2d[1]]
     error = (predicted_x - point_2d[0]) ** 2 + (predicted_y - point_2d[1]) ** 2
-    return error
+    return error, residual
 
+def compute_residuals(params, points_2d, n_cameras, n_points, camera_indices, point_indices):
+    camera_params = params[:n_cameras * 9].reshape((n_cameras, 9))
+    points_3d = params[n_cameras * 9:].reshape((n_points, 3))
+    
+    final_residuals = []
+    reproject_err = 0.0
+
+    for i in range(point_indices.shape[0]):
+        point_2d = points_2d[i, :]
+        point_3d = points_3d[point_indices[i], :]
+        camera = camera_params[camera_indices[i], :]
+        err, residual = reprojection_err(camera, point_2d, point_3d)
+        # print (residual)
+        reproject_err += err
+        final_residuals.append(residual)
+
+    print (reproject_err)
+    final_residuals = np.stack(final_residuals, axis=1)
+    final_residuals = final_residuals.reshape([-1])
+    return final_residuals
 
 def compute_total_error(points_2d, points_3d, camera_indices, point_indices, camera_params):
     reproj_error = 0.0
     
-    for i in range(init_point_indices.shape[0]):
-        point_2d = init_points_2d[i, :]
-        point_3d = init_points_3d[init_point_indices[i], :]
-        camera = init_camera_params[init_camera_indices[i], :]
-        err = reprojection_err(camera, point_2d, point_3d)
+    for i in range(point_indices.shape[0]):
+        point_2d = points_2d[i, :]
+        point_3d = points_3d[point_indices[i], :]
+        camera = camera_params[camera_indices[i], :]
+        err, _ = reprojection_err(camera, point_2d, point_3d)
         reproj_error += err
 
     return reproj_error
-
 
 if __name__ == "__main__":
     initial_values = "../data/problem-21-11315-pre.txt"
